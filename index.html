@@ -97,7 +97,7 @@
                 <a href="javascript:void 0" class="downbtn" onclick="return(runTask(this));" data-title="<%=items[i].title%>" data-id="<%=items[i].id%>" data-icon="<%=items[i].img%>" data-status="<%=items[i].downloadStatus%>" id="status_<%=items[i].id%>">离线下载</a>
                 <strong><%=items[i].title.sub(99, '...')%></strong>
                 <small>主演：<%if(items[i].actor){%><%=items[i].actor.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
-                <small>人气：<%=items[i].click%></small>
+                <small>评分：<%=items[i].score%></small>
 				<small id="status_<%=items[i].id%>_text" style="display:none;color:#66aa00"></small>
         </div>
     <%}%>
@@ -110,7 +110,7 @@
             <strong class="tvtitle"><%=items[i].title.sub(12, '...')%></strong>
             <small>主演：<%if(items[i].actor){%><%=items[i].actor.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
             <small>导演：<%if(items[i].director){%><%=items[i].director.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
-            <small class="top25">人气：<%=items[i].click%></small>
+            <small class="top25">评分：<%=items[i].score%></small>
         </div>
     <%}%>
 </script>
@@ -122,7 +122,7 @@
         <p class="year">年份：<span><%if(typeof year!='undefined'){%><%=year%><%}else{%>暂无<%}%></span></p>
         <p class="category">类型：<span><%if(typeof cate!='undefined'){%><%=cate.join(',').sub(20, '...')%><%}else{%>暂无<%}%></span></p>
         <p class="status">片长：<span><%if(typeof time!='undefined'){%><%=time%><%}else{%>未知<%}%></span></p>
-        <p class="status">点击：<span><%if(typeof click!='undefined'){%><%=click%><%}else{%>未知<%}%></span></p>
+        <p class="status">评分：<span><%if(typeof score!='undefined'){%><%=score%><%}else{%>未知<%}%></span></p>
     </div>
     <div class="desc-info">
         <h3>剧情介绍</h3>
@@ -130,7 +130,7 @@
     </div>
     <div class="from-info">
         <div class="site">
-            来源：搜狐视频
+            来源：<%=from%>
             <span></span>
         </div>
     </div>
@@ -145,7 +145,7 @@
         <p class="actor">主演：<span><%if(typeof actor!='undefined'){%><%=actor.join(',').sub(15, '...')%><%}else{%>暂无<%}%></span></p>
         <p class="year">年份：<span><%if(typeof year!='undefined'){%><%=year%><%}else{%>暂无<%}%></span></p>
         <p class="category">类型：<span><%if(typeof cate!='undefined'){%><%=cate.join(',').sub(20, '...')%><%}else{%>暂无<%}%></span></p>
-        <p class="status">点击：<span><%if(typeof click!='undefined'){%><%=click%><%}else{%>未知<%}%></span></p>
+        <p class="status">评分：<span><%if(typeof score!='undefined'){%><%=score%><%}else{%>未知<%}%></span></p>
     </div>
     
     <div class="desc-info">
@@ -177,7 +177,7 @@
     </div>
     <div class="from-info">
         <div class="site">
-            来源：搜狐视频
+            来源：<%=from%>
             <span></span>
         </div>
     </div>
@@ -194,7 +194,7 @@
             <strong class="tvtitle"><%=items[i].title.sub(12, '...')%></strong>
             <small>主演：<%if(items[i].actor){%><%=items[i].actor.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
             <small>导演：<%if(items[i].director){%><%=items[i].director.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
-            <small class="top25">人气：<%=items[i].click%></small>
+            <small class="top25">评分：<%=items[i].score%></small>
         </div>
     <%}%>
 </script>
@@ -210,7 +210,7 @@
             <strong class="tvtitle"><%=items[i].title.sub(12, '...')%></strong>
             <small>主演：<%if(items[i].actor){%><%=items[i].actor.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
             <small>导演：<%if(items[i].director){%><%=items[i].director.join(',').sub(16, '...')%><%}else{%>暂无<%}%></small>
-            <small class="top25">人气：<%=items[i].click%></small>
+            <small class="top25">评分：<%=items[i].score%></small>
         </div>
     <%}%>
 </script>
