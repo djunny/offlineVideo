@@ -16,17 +16,22 @@
 </head>
 <body>
 <div class="group" id="header">
-	<li data-tab="tv" style="width:30%">
-	    热门电视剧
+	<li data-tab="tv">
+	    电视剧
 	</li>
 	<li data-tab="movie">
-	    热门电影
+	    电影
 	</li>
-	<li data-tab="category-index" data-showloading="1" style="width:20%">
+	<li data-tab="singer-index" data-showloading="1" style="width:28%">
+	    我是歌手
+	</li>
+	<li data-tab="category-index" data-showloading="1">
 	    分类
 	</li>
 	<li data-tab="search-index" data-showloading="1">
-	    视频搜索
+	    搜索
+	</li>
+	<li data-tab="singer-detail" style="display:none">
 	</li>
 	<li data-tab="category" style="display:none">
 	</li>
@@ -34,23 +39,23 @@
 </div>
 <div id="wrapper">
     <!-- movie panel-->
-    <div id="movie" class="panel" data-title="热门电影">
+    <div id="movie" class="panel" data-title="视频搜索">
         <div class="list"></div>
     </div>
     <!-- tv panel-->
-    <div id="tv" class="panel" data-title="热门电视剧">
+    <div id="tv" class="panel" data-title="视频搜索">
         <div class="list"></div>
     </div>
     <!-- category panel-->
-    <div id="category-index" class="panel" data-title="视频分类">
+    <div id="category-index" class="panel" data-title="视频搜索">
 		<div class="list"></div>
     </div>
     <!-- search result panel-->
-    <div id="search" class="panel" data-title="视频搜索结果">
+    <div id="search" class="panel" data-title="视频搜索">
         <div class="list"></div>
     </div>
     <!-- category result panel-->
-    <div id="category" class="panel" data-title="视频分类">
+    <div id="category" class="panel" data-title="视频搜索">
         <div class="list"></div>
     </div>
     <!-- search index panel-->
@@ -69,6 +74,10 @@
 			</div>
 		</div>
 	</div>
+    <!-- singer index panel-->
+    <div id="singer-index" class="panel hpanel" data-title="视频搜索"><div class="list"></div></div>
+    <!-- singer defail panel-->
+    <div id="singer-detail" class="panel hpanel" data-title="我是歌手"><div class="list"></div></div>
     <!-- movie defail panel-->
     <div id="movie-detail" class="panel detail"><div class="info-wrap"></div></div>
     <!-- tv defail panel-->
@@ -235,6 +244,33 @@
 
 <script type="text/html" id="temp_search_index">
 	<%for(var i = 0, l = list.length; i < l; i++){%><a href="javascript:void 0" onmousedown="$(this).addClass('selected');" onmouseup="$(this).removeClass('selected');" onclick="window.goSearch('<%=list[i]%>')" data-tag="1"><%=list[i]%></a><%}%>
+</script>
+
+
+
+<script type="text/html" id="temp_singer_index">
+    <%for (var i = 0, l = items.length || 0; i<l; i++){%>
+        <div class="line" onclick="window.loadSinger('<%=items[i].id%>', '我是歌手 第<%=items.length-i%>期')" data-id="<%=items[i].id%>" <%=window.E['onmousedown']%>="$(this).addClass('active');" <%=window.E['onmouseup']%>="$(this).removeClass('active');">
+            <img src="<%=items[i].img%>" class="cover" />
+            <div class="tvupdate">共 <%=items[i].total%> 部</div>
+            <strong class="tvtitle">第<%=items.length-i%>期</strong>
+            <small><%=items[i].time%></small>
+        </div>
+    <%}%>
+</script>
+
+
+<script type="text/html" id="temp_singer-detail">
+    <%for (var i = 0, l = items.length || 0; i<l; i++){%>
+        <div class="line">
+                <img src="<%=items[i].img%>" class="cover" onerror="imgError(this)" />
+                <div class="splitline"></div>
+                <a href="javascript:void 0" class="downbtn" onclick="return(runTask(this));" data-title="<%=items[i].title%>" data-id="<%=items[i].id%>" data-icon="<%=items[i].img%>" data-status="<%=items[i].downloadStatus%>" id="status_<%=items[i].id%>">离线下载</a>
+                <strong><%=items[i].title.sub(99, '...')%></strong>
+                <small>演唱者：<%if(typeof items[i].actor != 'undefined'){%><%=items[i].actor.sub(16, '...')%><%}else{%>暂无<%}%></small>
+				<small id="status_<%=items[i].id%>_text" style="display:none;color:#66aa00"></small>
+        </div>
+    <%}%>
 </script>
 
 <div id="debug" style="display:block;position:absolute;bottom:1px solid #CCC;background:#000;color:#FFF;z-index:999999;left:0;bottom:1px solid;"></div>

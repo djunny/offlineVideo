@@ -46,7 +46,7 @@ _gaq.push(['_trackPageview']);
 			},
 			getStatus : function(id){
 				//console.log('getStatus:'+id);
-				return OTS_NONE;
+				return OTS_FINISH_SUCCESS;//OTS_NONE;
 			},
 			play : function(id){
 				//console.log('getStatus:'+id);
@@ -172,7 +172,7 @@ _gaq.push(['_trackPageview']);
 
 	//toggle list  ui
 	UI.toggleList = function(id){
-		if(id == 'search' || id == 'category'){
+		if(id == 'search' || id == 'category' || id == 'singer-detail'){
 			UI.toggleSearch(id);
 		}else{
 			$('#wrapper').css('bottom', '0px');
@@ -225,10 +225,12 @@ _gaq.push(['_trackPageview']);
 				case 'movie':
 				case 'category-index':
 				case 'search-index':
+				case 'singer-index':
 					return 1;
 					break;
 				case 'category':
 				case 'search':
+				case 'singer-detail':
 					return 2;
 					break;
 				case 'movie-detail':
@@ -452,16 +454,19 @@ _gaq.push(['_trackPageview']);
 				pageCaches['tv'] = [];
 				pageCaches['search'] = [];
 				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 			break;
 			case 'tv':
 				pageCaches['movie'] = [];
 				pageCaches['search'] = [];
 				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 			break;
 			case 'search':
 				pageCaches['tv'] = [];
 				pageCaches['movie'] = [];
 				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 			break;
 			case 'search-index':
 				
@@ -476,6 +481,7 @@ _gaq.push(['_trackPageview']);
 				pageCaches['movie'] = [];
 				pageCaches['search'] = [];
 				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 				$('.navbtn').each(function(){
 					var status = videoTaskPlugin.getStatus($(this).data('id'));
 					$(this).text(window.statusText(status));
@@ -487,6 +493,7 @@ _gaq.push(['_trackPageview']);
 				pageCaches['movie'] = [];
 				pageCaches['search'] = [];
 				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 				var unSelected = 0;
 				slog($('.tv-list .tv-task').length);
 				$('.tv-list .tv-task').each(function(){
@@ -505,6 +512,22 @@ _gaq.push(['_trackPageview']);
 					$('.navbtn').text('打包下载全部');
 					
 				}
+			break;
+			case 'singer-index':
+			break;
+			case 'singer-detail':
+				$('.downbtn').each(function(i, obj){
+					var id = $(obj).data('id'),
+					status = videoTaskPlugin.getStatus(id);
+					//status changed
+					if($(obj).data('status') != status){
+						window.refershStatus(status, '#status_'+id);
+					}
+				});
+				pageCaches['tv'] = [];
+				pageCaches['search'] = [];
+				pageCaches['category'] = [];
+				pageCaches['singer-detail'] = [];
 			break;
 		}
 	}
@@ -535,9 +558,9 @@ _gaq.push(['_trackPageview']);
 				return('下载失败');
 			break;
 			case OTS_WAITING:
-				return('等待PC端下载');
+				return('等待零流量下载');
 			case OTS_SYNCED:
-				return('等待与PC同步');
+				return('等待同步');
 			case OTS_EXECUTING:
 				return('正在下载中');
 			break;
@@ -595,7 +618,7 @@ _gaq.push(['_trackPageview']);
 	}
 	
 	//define all url
-	window.groupUrl = function(type, page){
+	window.groupUrl = function(type, page, extid){
 		switch(type){
 			case 'search-index':
 				return 'http://video.wandoujia.com/api/hot/word?size=20&jsonp=?';
@@ -605,6 +628,10 @@ _gaq.push(['_trackPageview']);
 				return 'http://video.wandoujia.com/api/s?page='+page+'&size=20&cate='+window.searchCate+'&jsonp=?';
 			case 'category-index':
 				return 'http://video.wandoujia.com/api/cate?jsonp=?';
+			case 'singer-index':
+				return 'http://video.wandoujia.com/singer/list?jsonp=?';
+			case 'singer-detail':
+				return 'http://video.wandoujia.com/singer/detail/'+extid+'?jsonp=?';
 			default:
 				return 'http://video.wandoujia.com/api/'+type+'/hot?page='+page+'&size=20&jsonp=?';
 		}
@@ -707,7 +734,7 @@ _gaq.push(['_trackPageview']);
 
 		pageCaches[type] = pageCaches[type] || [];
 		if(typeof pageCaches[type][page] == 'undefined'){
-			var groupUrl = window.groupUrl(type, page);
+			var groupUrl = window.groupUrl(type, page, thisTab.data('id'));
 			$.ajax({
 				type     : 'get',
 				url      : groupUrl,
@@ -724,6 +751,10 @@ _gaq.push(['_trackPageview']);
 							UI.refreshScroller(type, function(){});
 							UI.history.updateTitle(historyId, '视频搜索');
 							break;
+						case 'singer-index':
+							console.log(data);
+							$('#'+type+' .list').html($.template($("#temp_singer_index").html(), data));
+							break;
 						default:
 							if(typeof data.items != 'undefined'){
 								data.page = page;
@@ -734,7 +765,7 @@ _gaq.push(['_trackPageview']);
 		
 								var idx = data.items.length;
 								while(idx--){
-									data.items[idx].downloadStatus = (type == 'movie' ? videoTaskPlugin.getStatus(data.items[idx].id) : OTS_NONE);
+									data.items[idx].downloadStatus = (type == 'tv' ? OTS_NONE : videoTaskPlugin.getStatus(data.items[idx].id));
 									data.items[idx].img = imgUrl(data.items[idx].id);
 								}
 								pageCaches[type][page] = data;
@@ -743,7 +774,7 @@ _gaq.push(['_trackPageview']);
 									$('#'+type+' .list').html('');
 								}
 		
-								$('#'+type+' .list').append($.template("temp_"+type, data));
+								$('#'+type+' .list').append($.template($("#temp_"+type).html(), data));
 		
 								$('#'+type+' .list .pullUp').remove();
 		
@@ -778,7 +809,12 @@ _gaq.push(['_trackPageview']);
 		
 		return;
 	}
-	
+	window.loadSinger = function(id, title){
+		var tab = $('#header>li[data-tab="singer-detail"]');
+		tab.data('id', id);
+		$('#singer-detail').data('title', title);
+		window.loadGroup(tab.get(0), 1); 
+	} 
 	//load detail
 	window.loadDetail = function (obj, id, type, byBack){
 		if(isNotClickTime(event)){
@@ -808,6 +844,7 @@ _gaq.push(['_trackPageview']);
 		}
 		
 		gLog('PageClick', 'LoadDedail_'+currentShow, id);
+		
 		$.ajax({
 			type     : 'get',
 			url      : 'http://video.wandoujia.com/api/detail/'+id+'?jsonp=?',

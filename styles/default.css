@@ -26,7 +26,7 @@ a{text-decoration: none}
 .panel{padding:0;margin:0;}
 .group{background:#E5EADD;height:40px!important;}
 	.group h1{display:none; }
-	.group li{display:block;outline:none;width:25%;float:left;text-align:center;border-bottom:2px solid #D4D4D4;height:40px;line-height:38px;cursor:pointer;color:#333333;font-size: 16px;background:#F6F6F6;}
+	.group li{display:block;outline:none;width:18%;float:left;text-align:center;border-bottom:2px solid #D4D4D4;height:40px;line-height:38px;cursor:pointer;color:#333333;font-size: 16px;background:#F6F6F6;}
 	.group .current{border-bottom:2px solid #66aa00}
 	.group .current{color:#66aa00}
 	.group .selected{background:#E5EaDD;}
@@ -43,7 +43,10 @@ a{text-decoration: none}
 	.list > .active{background-color:#E5EADD!important;background-image:none}
 	.list > .active .downbtn{background-color:#E5EADD!important}
 	.list .cover{height:102px;width:72px;float:left;margin-right:10px; background:#FFF url(images/movie.png) no-repeat;background-size:100% 100%;border:1px solid #E4E3E3;padding:2px;}
-
+	
+	.hpanel .cover{height:70px;width:100px;}
+	.hpanel .line{background-position:0 109px}
+	
 .clear{clear:both;overflow:hidden;height:0;}
 .detail{}
 .detail .cover-info{overflow:hidden;padding:10px 0 0;}
